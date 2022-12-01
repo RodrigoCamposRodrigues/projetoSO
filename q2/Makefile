@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall 
+CFLAGS= -Wall 
 
 txt2epub: 
-	$(CC) txt2epub.c $(CFLAGS) -o txt2epub
+	$(CC) $(CFLAGS) txt2epub.c  -o txt2epub
 
 clean:
 	rm -rf txt2epub

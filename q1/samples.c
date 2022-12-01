@@ -3,22 +3,26 @@
 #include <time.h>
 
 
-long getRandomNumber(long lower, long upper){
+long getRandomNumber(long lower, long upper, long m){
 
-    //obter um número aleatório
     long number = (rand() % (upper - lower + 1)) + lower;
-    return number;
+    if (number > (upper - m)){
+        return upper - m - 2;
+    }
+    else{
+        return number;
+    }
 
 }
 
 int main(int agrc, char* argv[]){
-    //initializes random number generator
+
     srand(time(0));
 
-    FILE *text_file = fopen(argv[1], "r"); //argv[1] é o ficheiro que é passado na linha de comandos
+    FILE *text_file = fopen(argv[1], "r");
 
 
-    if (text_file == NULL){ //se não for passado nenhum ficheiro, dá erro
+    if (text_file == NULL){
 
         printf("\nError: Cannot open this file");
         return 0;
@@ -27,19 +31,19 @@ int main(int agrc, char* argv[]){
 
     long counter;
 
-    fseek(text_file, 0, SEEK_END); // mete a posição do ficheiro da stream a apontar para o fim
-    counter = ftell(text_file); // posição atual do ficheiro
-    
-    
-    for (int i = 0; i < atoi(argv[2]); i++){ //atoi transforma uma string em int, argv[2]=n
-        //inicio de cada linha
-        printf(">");
-        //procurar o inicio da porção de texto que quero dar print
-        fseek(text_file, getRandomNumber(1, counter), SEEK_SET);
+    fseek(text_file, 0, SEEK_END); // shifted to end of file
 
-        for (int j = 0; j < atoi(argv[3]); j++){//argv[3] = m
-            char letter = fgetc(text_file);//em cada iteração vou buscar a próxima letra
-            if (letter < 32){ //ignoramos todas as instruções da tabela ascci com cujo numero seja menor que 32
+    counter = ftell(text_file); // current position of text_file
+    
+
+    for (int i = 0; i < atoi(argv[2]); i++){
+        printf(">");
+
+        fseek(text_file, getRandomNumber(1, counter, atoi(argv[3])), SEEK_SET);
+
+        for (int j = 0; j < atoi(argv[3]); j++){
+            char letter = fgetc(text_file);
+            if (letter < 32){
                 j--;
                 continue;
             }
@@ -49,7 +53,6 @@ int main(int agrc, char* argv[]){
         }
         printf("<");
         printf("\n");
-        rewind(text_file);//vou para o inicio do file
     }
     return 0;
 }

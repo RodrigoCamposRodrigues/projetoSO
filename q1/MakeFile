@@ -1,0 +1,11 @@
+CC = gcc // compilador
+CFLAGS = -Wall
+TARGET = samples
+
+all: $(TARGET)
+
+$(TARGET): 
+    @ $(CC) $(CFLAGS) $(TARGET).c -o $(TARGET)
+
+clean:
+    @ $(RM) $(TARGET)
